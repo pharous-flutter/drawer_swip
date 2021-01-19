@@ -18,12 +18,14 @@ class SwipeDrawer extends StatefulWidget {
   final double bodyBackgroundPeekSize;
 
   final double radius;
+  Curve curve;
 
   SwipeDrawer({@required this.child,
     @required this.drawer,
     this.bodySize = 80,
     this.radius = 0,
     this.bodyBackgroundPeekSize = 50,
+    this.curve = Curves.easeIn,
     Key key,
     this.backgroundColor = Colors.black})
       : super(key: key);
@@ -35,6 +37,7 @@ class SwipeDrawer extends StatefulWidget {
 class SwipeDrawerState extends State<SwipeDrawer>
     with SingleTickerProviderStateMixin {
   AnimationController animationController;
+  Animation<double> animation;
 
   bool dragging = false;
 
@@ -42,6 +45,7 @@ class SwipeDrawerState extends State<SwipeDrawer>
   void initState() {
     animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    animation = CurvedAnimation(parent: animationController,curve: widget.curve);
     super.initState();
   }
 
@@ -60,12 +64,11 @@ class SwipeDrawerState extends State<SwipeDrawer>
     Size size = MediaQuery
         .of(context)
         .size;
-    return SafeArea(
-      child: AnimatedBuilder(
-          animation: animationController,
+    return AnimatedBuilder(
+          animation: animation,
           builder: (context, snapshot) {
-            double scale = .8 + .2 * (1 - animationController.value);
-            double scaleSmall = .7 + .3 * (1 - animationController.value);
+            double scale = .8 + .2 * (1 - animation.value);
+            double scaleSmall = .7 + .3 * (1 - animation.value);
             double reverse = isRTL ? -1 : 1;
             return Stack(
               overflow: Overflow.visible,
@@ -90,14 +93,14 @@ class SwipeDrawerState extends State<SwipeDrawer>
                         scale, size, widget.bodySize, reverse)),
                 Transform.translate(
                   offset: Offset(
-                      -size.width * (1 - animationController.value) * reverse,
+                      -size.width * (1 - animation.value) * reverse,
                       0),
                   child: buildDrawer(size),
                 ),
               ],
             );
-          }),
-    );
+          });
+
   }
 
 
@@ -113,10 +116,10 @@ class SwipeDrawerState extends State<SwipeDrawer>
         transform: Matrix4.identity()
           ..scale(scale, scale)
           ..translate(
-              (revers) * (size.width - move) * (animationController.value)),
+              (revers) * (size.width - move) * (animation.value)),
         alignment: FractionalOffset.center,
         // offset: Offset(
-        //     (size.width - 100) * (animationController.value), 0),
+        //     (size.width - 100) * (animation.value), 0),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(isOpened()?widget.radius:0),
           child: widget.child,

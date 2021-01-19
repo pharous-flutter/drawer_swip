@@ -25,34 +25,50 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var drawerKey = GlobalKey<SwipeDrawerState>();
 
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+      // add this line so you can add your appBar in Body
       extendBodyBehindAppBar: true,
       body: SwipeDrawer(
         radius: 20,
         key: drawerKey,
-        backgroundColor: Colors.grey,
+        bodyBackgroundPeekSize: 30,
+        backgroundColor: Colors.red,
+        // pass drawer widget
         drawer: buildDrawer(),
+        // pass body widget
         child: buildBody(),
       ),
     );
   }
 
-  Column buildDrawer() {
-    return Column(
+  Widget buildDrawer() {
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ListTile(title: Text('Title'),),
-          ListTile(title: Text('Title'),),
-          ListTile(title: Text('Title'),),
+          ListTile(
+            title: Text('Title'),
+          ),
+          ListTile(
+            title: Text('Title'),
+          ),
+          ListTile(
+            title: Text('Title'),
+          ),
         ],
-      );
+      ),
+    );
   }
 
   Widget buildBody() {
     return Column(
       children: [
+        // build your appBar
         AppBar(
           title: Text('AppBar title'),
           leading: InkWell(
@@ -65,6 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: Icon(Icons.menu)),
         ),
+       // build your screen body
         Expanded(
           child: Container(
             color: Colors.white,
