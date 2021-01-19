@@ -4,7 +4,7 @@
 
 [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://www.pharous.com/) 
 
-A OnBoarding Intro Screen Library for Easy and Quick Usage.
+A Swipe Drawer Library for Easy and Quick Usage.
 * Checkout the Original Author : [![GitHub followers])](https://github.com/ahmedelsayed96)
 
 
@@ -62,7 +62,7 @@ import 'package:drawer_swipe/drawer_swipe.dart';
 
 ## 🎨 Customization and Attributes
 
-#### OnBoardingIntro attributes
+#### SwipeDrawer attributes
 <table>
     <th>Attribute Name</th>
     <th>Example Value</th>
