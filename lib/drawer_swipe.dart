@@ -18,7 +18,8 @@ class SwipeDrawer extends StatefulWidget {
   final double bodyBackgroundPeekSize;
 
   final double radius;
-  Curve curve;
+  // animation curve
+  final Curve curve;
 
   SwipeDrawer({@required this.child,
     @required this.drawer,
