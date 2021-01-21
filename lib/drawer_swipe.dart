@@ -18,17 +18,19 @@ class SwipeDrawer extends StatefulWidget {
   final double bodyBackgroundPeekSize;
 
   final double radius;
+
   // animation curve
   final Curve curve;
 
-  SwipeDrawer({@required this.child,
-    @required this.drawer,
-    this.bodySize = 80,
-    this.radius = 0,
-    this.bodyBackgroundPeekSize = 50,
-    this.curve = Curves.easeIn,
-    Key key,
-    this.backgroundColor = Colors.black})
+  SwipeDrawer(
+      {@required this.child,
+      @required this.drawer,
+      @required Key key,
+      this.bodySize = 80,
+      this.radius = 0,
+      this.bodyBackgroundPeekSize = 50,
+      this.curve = Curves.easeIn,
+      this.backgroundColor = Colors.black})
       : super(key: key);
 
   @override
@@ -46,7 +48,8 @@ class SwipeDrawerState extends State<SwipeDrawer>
   void initState() {
     animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-    animation = CurvedAnimation(parent: animationController,curve: widget.curve);
+    animation =
+        CurvedAnimation(parent: animationController, curve: widget.curve);
     super.initState();
   }
 
@@ -62,48 +65,43 @@ class SwipeDrawerState extends State<SwipeDrawer>
     TextDirection currentDirection = Directionality.of(context);
     bool isRTL = currentDirection == TextDirection.rtl;
     // get Screen Size
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return AnimatedBuilder(
-          animation: animation,
-          builder: (context, snapshot) {
-            double scale = .8 + .2 * (1 - animation.value);
-            double scaleSmall = .7 + .3 * (1 - animation.value);
-            double reverse = isRTL ? -1 : 1;
-            return Stack(
-              overflow: Overflow.visible,
-              children: [
-                Transform.translate(
-                  offset: Offset(0, 0),
-                  child: Container(
-                    height: size.height,
-                    width: size.width,
-                    color: widget.backgroundColor,
-                  ),
+        animation: animation,
+        builder: (context, snapshot) {
+          double scale = .8 + .2 * (1 - animation.value);
+          double scaleSmall = .7 + .3 * (1 - animation.value);
+          double reverse = isRTL ? -1 : 1;
+          return Stack(
+            overflow: Overflow.visible,
+            children: [
+              Transform.translate(
+                offset: Offset(0, 0),
+                child: Container(
+                  height: size.height,
+                  width: size.width,
+                  color: widget.backgroundColor,
                 ),
-                Opacity(
-                  opacity: .3,
-                  child: buildAnimationBody(scaleSmall, size,
-                      widget.bodySize + widget.bodyBackgroundPeekSize, reverse),
-                ),
-                GestureDetector(
-                    onHorizontalDragStart: (details) {},
-                    behavior: HitTestBehavior.translucent,
-                    child: buildAnimationBody(
-                        scale, size, widget.bodySize, reverse)),
-                Transform.translate(
-                  offset: Offset(
-                      -size.width * (1 - animation.value) * reverse,
-                      0),
-                  child: buildDrawer(size),
-                ),
-              ],
-            );
-          });
-
+              ),
+              Opacity(
+                opacity: .3,
+                child: buildAnimationBody(scaleSmall, size,
+                    widget.bodySize + widget.bodyBackgroundPeekSize, reverse),
+              ),
+              GestureDetector(
+                  onHorizontalDragStart: (details) {},
+                  behavior: HitTestBehavior.translucent,
+                  child: buildAnimationBody(
+                      scale, size, widget.bodySize, reverse)),
+              Transform.translate(
+                offset:
+                    Offset(-size.width * (1 - animation.value) * reverse, 0),
+                child: buildDrawer(size),
+              ),
+            ],
+          );
+        });
   }
-
 
   Container buildDrawer(Size size) {
     return Container(
@@ -111,19 +109,18 @@ class SwipeDrawerState extends State<SwipeDrawer>
         child: widget.drawer);
   }
 
-  Transform buildAnimationBody(double scale, Size size, double move,
-      double revers) {
+  Transform buildAnimationBody(
+      double scale, Size size, double move, double revers) {
     return Transform(
         transform: Matrix4.identity()
           ..scale(scale, scale)
-          ..translate(
-              (revers) * (size.width - move) * (animation.value)),
+          ..translate((revers) * (size.width - move) * (animation.value)),
         alignment: FractionalOffset.center,
         // offset: Offset(
         //     (size.width - 100) * (animation.value), 0),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(isOpened()?widget.radius:0),
-          child: widget.child,
+          borderRadius: BorderRadius.circular(isOpened() ? widget.radius : 0),
+          child: Container(color: Colors.white, child: widget.child),
         ));
   }
 
@@ -146,4 +143,3 @@ class SwipeDrawerState extends State<SwipeDrawer>
     return animationController.isCompleted;
   }
 }
-
